@@ -1,7 +1,10 @@
 const multifeed = require('multifeed')
 const hypercore = require('hypercore')
 const thunky = require('thunky')
+const events = require('events')
+const inherits = require('inherits')
 
+const swarm = require('./swarm')
 const AddItem = require('./actions/add-item')
 const RemoveItem = require('./actions/remove-item')
 
@@ -10,6 +13,8 @@ module.exports = MultiList
 function MultiList (storage, key, opts = {}) {
   if (!(this instanceof MultiList)) return new MultiList(storage, key, opts)
   if (!opts) opts = {}
+
+  events.EventEmitter.call(this)
 
   this.key = key || null
 
@@ -30,6 +35,8 @@ function MultiList (storage, key, opts = {}) {
   })
 }
 
+inherits(MultiList, events.EventEmitter)
+
 MultiList.prototype.add = function (params, callback) {
   if (!callback) callback = noop
   if (!params) return callback(new Error('You must pass a set of parameters to create a new item'))
@@ -40,6 +47,10 @@ MultiList.prototype.add = function (params, callback) {
       callback(err, err ? null : item)
     })
   })
+}
+
+MultiList.prototype.remove = function (params, callback) {
+
 }
 
 MultiList.prototype.list = function (callback) {
@@ -64,4 +75,24 @@ MultiList.prototype.list = function (callback) {
       })
     })
   })
+}
+
+MultiList.prototype.swarm = function (callback) {
+  swarm(this, callback)
+}
+
+MultiList.prototype.getKey = function (callback) {
+  if (!callback) return
+
+  this.feed((feed) => {
+    callback(null, feed.key.toString('hex'))
+  })
+}
+
+MultiList.prototype._addConnection = function (key) {
+  this.emit('peer-added', key)
+}
+
+MultiList.prototype._removeConnection = function (key) {
+  this.emit('peer-dropped', key)
 }
