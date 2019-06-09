@@ -18,6 +18,9 @@ function MultiList (storage, key, opts = {}) {
 
   this.key = key || null
 
+  this.on('peer-added', (key) => console.info(`${key} connected`))
+  this.on('peer-dropped', (key) => console.log(`${key} dropped`))
+
   var self = this
 
   this.multi = thunky(function (callback) {

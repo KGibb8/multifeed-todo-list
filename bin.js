@@ -15,14 +15,6 @@ function App () {
 
   multilist.getKey(console.log)
 
-  multilist.on('peer-added', (key) => {
-    console.info(`${key} connected`)
-  })
-
-  multilist.on('peer-dropped', (key) => {
-    console.log(`${key} dropped`)
-  })
-
   function Command (feed) {
     return yargs
       .command('swarm', 'swarm to share your list', (argv) => {
