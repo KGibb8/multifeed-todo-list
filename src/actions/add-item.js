@@ -1,22 +1,14 @@
-const crypto = require('crypto')
+const Action = require('./action')
 
-module.exports = AddItem
+module.exports = class AddItem extends Action {
+  constructor (props) {
+    var self = Object.assign({ type: 'list/add-item' }, props) 
 
-AddItem.toString = 'list/add-item'
+    super(self)
 
-function AddItem (params) {
-  const { id, name, createdAt } = params
-
-  const self = {
-    id: id || crypto.randomBytes(32).toString('hex'),
-    type: 'list/add-item',
-    name,
-    createdAt: createdAt || Date.now()
+    this.name = props.name
+    this._validate([
+      { param: 'name', type: 'string' }
+    ])
   }
-
-  return Object.assign(self, {
-    toString: () => (
-      JSON.stringify(self, null, 2)
-    )
-  })
 }

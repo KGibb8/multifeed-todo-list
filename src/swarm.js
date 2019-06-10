@@ -1,6 +1,8 @@
-import Discovery from 'hyperdiscovery'
+const Discovery = require('hyperdiscovery')
+const isFunction = require('./lib/is-function')
+const assert = require('./lib/assert')
 
-export default function Swarm (connection, callback) {
+module.exports = function Swarm (connection, callback) {
   assert(isFunction(callback), 'provide a callback function')
 
   connection.getKey((err, key) => {
@@ -22,19 +24,4 @@ export default function Swarm (connection, callback) {
       callback(null, swarm)
     })
   })
-}
-
-class AssertionError extends Error {
-  constructor (message) {
-    super(message)
-  }
-}
-
-function assert (ok, message) {
-  if (!ok) throw new AssertionError(message)
-  else return true
-}
-
-function isFunction (variable) {
-  return typeof variable === 'function'
 }

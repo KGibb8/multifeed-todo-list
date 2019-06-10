@@ -1,6 +1,6 @@
-import yargs from 'yargs'
+const yargs = require('yargs')
 
-export default function CLI (controller) {
+module.exports = function CLI (controller) {
   return yargs
     .command('swarm', 'swarm to share your list', (argv) => {
       controller.swarm((err, swarm) => callback(err, swarm))
@@ -27,11 +27,10 @@ export default function CLI (controller) {
     })
 
     .command('list', 'display your entire list', () => {
-      controller.list(callback)
+      controller.all(callback)
     })
 
     .argv
-  }
 }
 
 function callback (err, res) {

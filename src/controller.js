@@ -1,18 +1,24 @@
-import AddItem from '../actions/add-item'
-import RemoveItem from '../actions/remove-item'
+const AddItem = require('./actions/add-item')
+const RemoveItem = require('./actions/remove-item')
+const { EventEmitter } = require('events')
 
-export default class Controller {
+module.exports = class Controller extends EventEmitter {
   constructor (connection) {
+    super()
     this.connection = connection
+
+    this.on('add', this._onAdd.bind(this))
+    this.on('all', this._onAll.bind(this))
   }
 
   add (params, callback) {
-    if (!callback) callback = () => {}
-    if (!params) return callback(new Error('You must pass a set of parameters to create a new item'))
+    assert(isFunction(callback), 'callback required')
+    assert(validate(params), 'valid parameters required')
 
     this.connection.feed((feed) => {
       var item = new AddItem(params)
       feed.append(item.toString(), function (err) {
+        this.emit('add', item)
         callback(err, err ? null : item)
       })
     })
@@ -24,9 +30,9 @@ export default class Controller {
 
   all (callback) {
     if (!callback) callback = () => {}
-    console.log(multi.feeds().length)
 
-    this.connection.multi((multi) => {
+    this.connection.multifeed((multi) => {
+      console.log(multi.feeds().length)
       multi.feeds().forEach((feed) => {
         var stream = feed.createReadStream({ start: 0, end: feed.length  })
         const items = []
@@ -40,9 +46,19 @@ export default class Controller {
               if (index !== -1) items.splice(index, 1)
           }
         }).on('end', () => {
+	  this.emit('all', items)
           callback(null, items)
         })
       })
     })
+  }
+
+  // hooks
+  _onAdd (item) {
+    console.log(item)
+  }
+
+  _onAll (items) {
+    console.log(items)
   }
 }

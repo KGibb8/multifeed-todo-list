@@ -1,30 +1,29 @@
-import multifeed from 'multifeed'
-import hypercore from 'hypercore'
-import thunky from 'thunky'
-import events from 'events'
+const multifeed = require('multifeed')
+const hypercore = require('hypercore')
+const thunky = require('thunky')
+const { EventEmitter } = require('events')
 
-import Swarm from './swarm'
+const Swarm = require('./swarm')
 
-export default class Connection extends events.EventsEmitter {
+module.exports = class Connection extends EventEmitter {
   constructor (storage, key, opts) {
+    super()
+    this.storage = storage
     this.key = key || null
-
-    this.multifeed = thunky(this.multifeed).bind(this)
-    this.feed = thunky(this.feed).bind(this)
+    this.multifeed = thunky(this.multifeed.bind(this))
+    this.feed = thunky(this.feed.bind(this))
     this.encoding.bind(this)
     this.swarm = this.swarm.bind(this)
     this.getKey = this.getKey.bind(this)
+
     this._addConnection = this._addConnection.bind(this)
     this._removeConnection = this._removeConnection.bind(this)
-
-    this.on('peer-added', (key) => console.info(`${key} connected`))
-    this.on('peer-dropped', (key) => console.log(`${key} dropped`))
   }
 
   feed (callback) {
     var self = this
-    self.multilist((multilist) => {
-      multilist.writer('local', (err, feed) => {
+    self.multifeed((multifeed) => {
+      multifeed.writer('local', (err, feed) => {
         if (!self.key) self.key = feed.key.toString('hex')
         callback(feed)
       })
@@ -32,7 +31,7 @@ export default class Connection extends events.EventsEmitter {
   }
 
   multifeed (callback) {
-    const multi =  multifeed(hypercore, storage, encoding())
+    const multi =  multifeed(hypercore, this.storage, this.encoding())
     multi.ready(() => callback(multi))
   }
 
@@ -53,10 +52,10 @@ export default class Connection extends events.EventsEmitter {
   }
 
   _addConnection (key) {
-    this.emit('peer-added', key)
+    console.info(`${key} connected`)
   }
 
   _removeConnection (key) {
-    this.emit('peer-dropped', key)
+    console.log(`${key} dropped`)
   }
 }
