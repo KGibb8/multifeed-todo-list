@@ -1,6 +1,8 @@
 const AddItem = require('./actions/add-item')
 const RemoveItem = require('./actions/remove-item')
 const { EventEmitter } = require('events')
+const assert = require('./lib/assert')
+const isFunction = require('./lib/is-function')
 
 module.exports = class Controller extends EventEmitter {
   constructor (connection) {
@@ -13,12 +15,12 @@ module.exports = class Controller extends EventEmitter {
 
   add (params, callback) {
     assert(isFunction(callback), 'callback required')
-    assert(validate(params), 'valid parameters required')
 
-    this.connection.feed((feed) => {
+    var self = this
+    self.connection.feed((feed) => {
       var item = new AddItem(params)
       feed.append(item.toString(), function (err) {
-        this.emit('add', item)
+        self.emit('add', item)
         callback(err, err ? null : item)
       })
     })
@@ -31,7 +33,8 @@ module.exports = class Controller extends EventEmitter {
   all (callback) {
     if (!callback) callback = () => {}
 
-    this.connection.multifeed((multi) => {
+    var self = this
+    self.connection.multifeed((multi) => {
       console.log(multi.feeds().length)
       multi.feeds().forEach((feed) => {
         var stream = feed.createReadStream({ start: 0, end: feed.length  })
@@ -39,14 +42,14 @@ module.exports = class Controller extends EventEmitter {
         stream.on('data', (chunk) => {
           const data = JSON.parse(chunk.toString())
           switch (data.type) {
-            case AddItem.toString:
+            case 'list/add-item':
               items.push(new AddItem(data))
-            case RemoveItem.toString:
+            case 'list/remove-item':
               const index = items.map(item => item.id).indexOf(data.itemId)
               if (index !== -1) items.splice(index, 1)
           }
         }).on('end', () => {
-	  this.emit('all', items)
+	  self.emit('all', items)
           callback(null, items)
         })
       })

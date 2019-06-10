@@ -35,5 +35,4 @@ module.exports = function CLI (controller) {
 
 function callback (err, res) {
   if (err) throw err
-  console.log(res)
 }
