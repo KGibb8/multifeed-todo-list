@@ -3,7 +3,7 @@ const os = require('os')
 const { name: APP_NAME } = require('../package.json')
 
 const CLI = require('./bin')
-const Connection = require('./connection')
+const Connection = require('./config/connection')
 const Controller = require('./controller')
 
 class App {
@@ -14,10 +14,10 @@ class App {
     this.controller = new Controller(this.connection)
   }
 
-  start () {
+  init () {
     CLI(this.controller)
   }
 }
 
 const app = new App()
-app.start()
+app.init()

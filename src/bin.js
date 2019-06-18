@@ -3,7 +3,7 @@ const yargs = require('yargs')
 module.exports = function CLI (controller) {
   return yargs
     .command('swarm', 'swarm to share your list', (argv) => {
-      controller.swarm((err, swarm) => callback(err, swarm))
+      controller.connection.swarm((err, swarm) => callback(err, swarm))
     })
 
     .command('add', 'add an item to your list', (yargs) => {

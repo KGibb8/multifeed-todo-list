@@ -1,6 +1,6 @@
 const Discovery = require('hyperdiscovery')
-const isFunction = require('./lib/is-function')
-const assert = require('./lib/assert')
+const isFunction = require('../lib/is-function')
+const assert = require('../lib/assert')
 
 module.exports = function Swarm (connection, callback) {
   assert(isFunction(callback), 'provide a callback function')

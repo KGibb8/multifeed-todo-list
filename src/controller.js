@@ -9,7 +9,8 @@ module.exports = class Controller extends EventEmitter {
     super()
     this.connection = connection
 
-    this.on('add', this._onAdd.bind(this))
+    this.on('before-add', this._beforeAdd.bind(this))
+    this.on('after-add', this._afterAdd.bind(this))
     this.on('all', this._onAll.bind(this))
   }
 
@@ -19,8 +20,9 @@ module.exports = class Controller extends EventEmitter {
     var self = this
     self.connection.feed((feed) => {
       var item = new AddItem(params)
+      self.emit('before-add', item)
       feed.append(item.toString(), function (err) {
-        self.emit('add', item)
+        self.emit('after-add', item)
         callback(err, err ? null : item)
       })
     })
@@ -57,7 +59,11 @@ module.exports = class Controller extends EventEmitter {
   }
 
   // hooks
-  _onAdd (item) {
+  _beforeAdd (item) {
+    console.log(item)
+  }
+
+  _afterAdd (item) {
     console.log(item)
   }
 

@@ -1,22 +1,15 @@
 const crypto = require('crypto')
+const Action = require('./action')
 
-module.exports = RemoveItem
+module.exports = class RemoveItem extends Action {
+  constructor (props) {
+    var self = Object.assign({ type: 'list/remove-item' }, props)
 
-RemoveItem.toString = 'list/remove-item'
+    super(self)
 
-function RemoveItem (params) {
-  const { id, itemId, createdAt } = params
-
-  const self = {
-    id: id || crypto.randomBytes(32).toString('hex'),
-    type: 'list/remove-item',
-    itemId: itemId,
-    createdAt: createdAt || Date.now()
+    this.name = props.itemId
+    this._validate([
+      { param: 'itemId', type: 'string' }
+    ])
   }
-
-  return Object.assign(self, {
-    toString: () => (
-      JSON.stringify(self, null, 2)
-    )
-  })
 }

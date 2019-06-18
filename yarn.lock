@@ -499,6 +499,24 @@ k-rpc@^4.2.1:
     randombytes "^2.0.5"
     safe-buffer "^5.1.1"
 
+kappa-core@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/kappa-core/-/kappa-core-3.0.1.tgz#3b0a969118bd13bd58c109ab82e72ebd20f22841"
+  integrity sha512-yGf9dDMsIAnQoQMXsHoayGDB1XdijaSlbgHVQt646d8wBgQgiGvubJxJWWc8YJ5SnCWDUbgekpSlw4joII8NvA==
+  dependencies:
+    hypercore "^7.2.0"
+    inherits "^2.0.3"
+    multifeed "^3.0.6"
+    multifeed-index "^3.2.2"
+
+kappa-view-level@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/kappa-view-level/-/kappa-view-level-2.0.1.tgz#103261c273249525d7334be056790947a42222fd"
+  integrity sha512-dsy01hs+0yigkYZCMSGWIkbrTC2YCJw+xKjmSy05NQvNDE1v0+mU4R4QBvdSDy4Xs+wtSu8ZszKRX6Dw6f0oEQ==
+  dependencies:
+    pump "^3.0.0"
+    readable-stream "^3.4.0"
+
 last-one-wins@^1.0.4:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/last-one-wins/-/last-one-wins-1.0.4.tgz#c1bfd0cbcb46790ec9156b8d1aee8fcb86cda22a"
@@ -609,7 +627,14 @@ multicast-dns@^7.1.1:
     dns-packet "^4.0.0"
     thunky "^1.0.2"
 
-multifeed@^3.0.8:
+multifeed-index@^3.2.2:
+  version "3.3.2"
+  resolved "https://registry.yarnpkg.com/multifeed-index/-/multifeed-index-3.3.2.tgz#cec16c618b761c801eab9afe92acb38d0f62daf1"
+  integrity sha512-UPEpvca/hx0UqanoMs9uMEpTrFbmW8CV9V4Oww44fQxLj/m6eAqhFyVMCanKjS4daL9K8hvfPtWj5V4KsKat+Q==
+  dependencies:
+    inherits "^2.0.3"
+
+multifeed@^3.0.6, multifeed@^3.0.8:
   version "3.0.8"
   resolved "https://registry.yarnpkg.com/multifeed/-/multifeed-3.0.8.tgz#31c623cbb79d0b72fd4d9dec01c8cd907ba82e74"
   integrity sha512-OsNz8PFD3YUiPycZo093a/FnO88lc5xoFUgtie3loyfsR85cn6Ui4rvYTiJWpfhJk4AruditvoyX0Rx6Z513SQ==
@@ -798,7 +823,7 @@ randombytes@^2.0.3, randombytes@^2.0.5:
   dependencies:
     safe-buffer "^5.1.0"
 
-"readable-stream@2 || 3":
+"readable-stream@2 || 3", readable-stream@^3.4.0:
   version "3.4.0"
   resolved "https://registry.yarnpkg.com/readable-stream/-/readable-stream-3.4.0.tgz#a51c26754658e0a3c21dbf59163bd45ba6f447fc"
   integrity sha512-jItXPLmrSR8jmTRmRWJXCnGJsfy85mB3Wd/uINMXA65yrnFo0cPClFIUWzo2najVNSl+mx7/4W8ttlLWJe99pQ==

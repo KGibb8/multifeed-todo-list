@@ -3,6 +3,8 @@
     "hypercore": "^7.2.0",
     "hyperdiscovery": "^9.0.2",
     "inherits": "^2.0.3",
+    "kappa-core": "^3.0.1",
+    "kappa-view-level": "^2.0.1",
     "multifeed": "^3.0.8",
     "os": "^0.1.1",
     "pull-stream": "^3.6.12",
@@ -15,7 +17,7 @@
   "main": "index.js",
   "devDependencies": {},
   "scripts": {
-    "start": "node index.js"
+    "start": "node src/index.js"
   },
   "author": "",
   "license": "ISC",
